@@ -174,7 +174,7 @@ def notify_handler(verb, **kwargs):
         recipient = recipient,
         actor_content_type=ContentType.objects.get_for_model(actor),
         actor_object_id=actor.pk,
-        verb=unicode(verb),
+        verb=str(verb),  # unicode(verb),
         public=bool(kwargs.pop('public', True)),
         description=kwargs.pop('description', None),
         timestamp=kwargs.pop('timestamp', now())
