@@ -20,39 +20,40 @@ if getattr(settings, 'USE_TZ'):
 
 
 class NotificationQuerySet(models.query.QuerySet):
-    
+
     def unread(self):
         "Return only unread items in the current queryset"
         return self.filter(unread=True)
-    
+
     def read(self):
         "Return only read items in the current queryset"
         return self.filter(unread=False)
-    
+
     def mark_all_as_read(self, recipient=None):
         """Mark as read any unread messages in the current queryset.
-        
+
         Optionally, filter these by recipient first.
         """
-        # We want to filter out read ones, as later we will store 
+        # We want to filter out read ones, as later we will store
         # the time they were marked as read.
         qs = self.unread()
         if recipient:
             qs = qs.filter(recipient=recipient)
-        
+
         qs.update(unread=False)
-    
+
     def mark_all_as_unread(self, recipient=None):
         """Mark as unread any read messages in the current queryset.
-        
+
         Optionally, filter these by recipient first.
         """
         qs = self.read()
-        
+
         if recipient:
             qs = qs.filter(recipient=recipient)
-            
+
         qs.update(unread=True)
+
 
 class Notification(models.Model):
     """
@@ -85,7 +86,7 @@ class Notification(models.Model):
     """
     LEVELS = Choices('success', 'info', 'warning', 'error')
     level = models.CharField(choices=LEVELS, default='info', max_length=20)
-    
+
     recipient = models.ForeignKey(settings.AUTH_USER_MODEL, blank=False, related_name='notifications')
     unread = models.BooleanField(default=True, blank=False)
 
@@ -112,11 +113,14 @@ class Notification(models.Model):
     timestamp = models.DateTimeField(default=now)
 
     public = models.BooleanField(default=True)
-    
+
     objects = managers.PassThroughManager.for_queryset_class(NotificationQuerySet)()
 
     class Meta:
         ordering = ('-timestamp', )
+
+    def __str__(self):
+        return self.__unicode__()
 
     def __unicode__(self):
         ctx = {
