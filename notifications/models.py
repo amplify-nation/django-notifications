@@ -176,7 +176,7 @@ def notify_handler(verb, **kwargs):
     """
 
     kwargs.pop('signal', None)
-    recipient = kwargs.pop('recipient')
+    recipient = kwargs.pop('recipient', None)
     actor = kwargs.pop('sender')
     newnotify = Notification(
         recipient = recipient,
