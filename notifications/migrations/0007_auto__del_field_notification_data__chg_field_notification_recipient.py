@@ -4,6 +4,13 @@ from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
+try:
+    from django.contrib.auth import get_user_model
+except ImportError: # django < 1.5
+    from django.contrib.auth.models import User
+else:
+    User = get_user_model()
+
 
 class Migration(SchemaMigration):
 
@@ -13,7 +20,7 @@ class Migration(SchemaMigration):
 
 
         # Changing field 'Notification.recipient'
-        db.alter_column('notifications_notification', 'recipient_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['users.User'], null=True))
+        db.alter_column('notifications_notification', 'recipient_id', self.gf('django.db.models.fields.related.ForeignKey')(to=User, null=True))
 
     def backwards(self, orm):
         # Adding field 'Notification.data'
