@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.timezone import utc
 from .utils import id2slug
 
-from notifications.signals import notify
+from .signals import notify
 
 from model_utils import managers, Choices
 
@@ -157,6 +157,11 @@ class Notification(models.Model):
     def mark_as_read(self):
         if self.unread:
             self.unread = False
+            self.save()
+
+    def mark_as_unread(self):
+        if not self.unread:
+            self.unread = True
             self.save()
 
 EXTRA_DATA = False
