@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='django-notifications-hq',
-    version='1.0.0rc3',
+    version='1.0.0',
     description='GitHub notifications alike app for Django.',
     long_description=open('README.rst').read(),
     author='Amplify Nation',
